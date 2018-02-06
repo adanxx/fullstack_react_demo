@@ -9,7 +9,7 @@
   },
   "scripts": {
     "start": "node index.js",
-    "dev": "nodmeon index.js" 
+    "dev": "nodemon index.js" 
   },
   "author": "",
   "license": "ISC",
