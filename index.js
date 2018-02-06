@@ -1,21 +1,35 @@
-const express = require('express');
+const express = require("express");
+const passport = require("passport");
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
+const keys = require("./config/keys");
 
 const app = express();
 
-app.get('/',(req, res)=>{
-   res.send({Message: 'Express is up and running'});
-   console.log('Inside: get/Home - ')
-})
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: keys.googleClientID,
+      clientSecret: keys.clientSecret,
+      callbackURL: "/auth/google/callback"
+    },
+    accessToken => {
+      console.log(accessToken);
+      //   User.findOrCreate(
+      //     {
+      //       googleId: profile.id
+      //     },
+      //     function(err, user) {
+      //       return cb(err, user);
+      //     }
+      //   );
+    }
+  )
+);
 
-
-
-
-
-
-
-
-
-
+app.get("/auth/google", passport.authenticate("google", {
+    scope: ["profile", "email"]
+  })
+);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT);
