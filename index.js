@@ -9,27 +9,23 @@ passport.use(
   new GoogleStrategy(
     {
       clientID: keys.googleClientID,
-      clientSecret: keys.clientSecret,
+      clientSecret: keys.googleClientSecret,
       callbackURL: "/auth/google/callback"
     },
-    accessToken => {
-      console.log(accessToken);
-      //   User.findOrCreate(
-      //     {
-      //       googleId: profile.id
-      //     },
-      //     function(err, user) {
-      //       return cb(err, user);
-      //     }
-      //   );
-    }
-  )
-);
+    (accessToken,  refreshToken, profile, cb)=> {
+        console.log('accessToken:'+ accessToken);
+        console.log('refreshToken:'+ JSON.stringify(refreshToken));
+        console.log('profile:'+ JSON.stringify(profile));
+     
+      }
+));
 
-app.get("/auth/google", passport.authenticate("google", {
+app.get( "/auth/google", passport.authenticate("google", {
     scope: ["profile", "email"]
   })
 );
+
+app.get("/auth/google/callback", passport.authenticate("google"));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT);
